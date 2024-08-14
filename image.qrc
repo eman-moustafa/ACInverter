@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/About.png</file>
+        <file>images/application-exit.png</file>
+        <file>images/clear.png</file>
+        <file>images/connect.png</file>
+        <file>images/disconnect.png</file>
+        <file>images/icons8-recording.gif</file>
+        <file>images/icons8-replay.gif</file>
+        <file>images/QT.png</file>
+        <file>images/settings.png</file>
+    </qresource>
+</RCC>
