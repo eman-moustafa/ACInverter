@@ -15,6 +15,11 @@
 #include <QPixmap>
 #include <QFileDialog>
 
+#include <QLineSeries>
+#include <QDateTime>
+#include <QtCharts>
+#include <QChartView>
+#include <QLineSeries>
 
 
 
@@ -193,6 +198,33 @@ private slots:
 
     QString numberToString(int number) ;
 
+
+
+    void on_btn_plot_clicked();
+    void createChart();
+    void updateChart();
+
+public:
+   QValueAxis *axisX  ;
+   QValueAxis *axisY;
+//   QDateTimeAxis *axisX = new QDateTimeAxis();
+
+
+   ///create chartView
+   QChartView *chartView;
+
+
+   ///create chart
+   QChart *chart = new QChart();
+
+
+
+   ///create lineseries
+    QLineSeries *seriesIRReadingIntial;
+    QLineSeries *seriesIRReadingCurrent;
+
+    ///Timer
+    QTimer *timerChart;
 
 
 private:

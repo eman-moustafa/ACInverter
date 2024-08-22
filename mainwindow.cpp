@@ -30,8 +30,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::readData);
 
+    createChart();
+
 
 }
+
+
 
 void MainWindow::initActionsConnections()
 {
@@ -595,5 +599,89 @@ void MainWindow::on_pushButton_clicked()
 
 
 
+}
+
+void MainWindow:: createChart()
+{
+    // Create the line series
+      seriesIRReadingIntial= new QLineSeries();
+      seriesIRReadingCurrent= new QLineSeries();
+
+      // Create the chart and set the series
+
+      chart->addSeries(seriesIRReadingCurrent);
+      chart->addSeries(seriesIRReadingIntial);
+
+      QFont font;
+      font.setPixelSize(18);
+      font.setBold(5);
+      chart->setTitleFont(font);
+
+
+// Create the X and Y axes
+      axisY = new QValueAxis();
+      axisX=new QValueAxis;
+     // axisX->setFormat("hh:mm");
+      chart->addAxis(axisX, Qt::AlignBottom);
+      chart->addAxis(axisY, Qt::AlignLeft);
+
+
+      seriesIRReadingCurrent->attachAxis(axisX);
+      seriesIRReadingCurrent->attachAxis(axisY);
+
+      seriesIRReadingIntial->attachAxis(axisX);
+      seriesIRReadingIntial->attachAxis(axisY);
+
+
+      // Set the pen for the series
+
+
+      QPen penIRReadingIntial(Qt::red);
+      penIRReadingIntial.setWidth(5);
+      seriesIRReadingIntial->setPen(penIRReadingIntial);
+
+
+
+      QPen penIRReadingCurrent(Qt::green);
+      penIRReadingCurrent.setWidth(5);
+      seriesIRReadingCurrent->setPen(penIRReadingCurrent);
+
+
+      // Create the chart view
+      chartView = new QChartView(chart);
+}
+
+void MainWindow::updateChart()
+{
+
+
+      int x = QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000.0; // Current timestamp
+
+          {seriesIRReadingIntial->append(QDateTime::currentDateTime().toMSecsSinceEpoch(), m_Data->IRReading_Intial.toDouble());}
+          {seriesIRReadingCurrent->append(QDateTime::currentDateTime().toMSecsSinceEpoch() , m_Data->IRReading_Current.toDouble());}
+
+
+
+      axisX->setRange(ui->doubleSpinBox_3->value(), ui->doubleSpinBox_4->value());
+
+
+
+      // Adjust the Y axis range based on the data
+      axisY->setRange(ui->doubleSpinBox->value(), ui->doubleSpinBox_2->value());
+
+}
+
+
+
+void MainWindow::on_btn_plot_clicked()
+{
+    chartView->show();
+    chartView->resize(700,700);
+
+
+    timerChart =new QTimer(this);
+
+    connect(timerChart, SIGNAL(timeout()), this, SLOT(updateChart()));
+    timerChart->start(1000); // Update every 1 second
 }
 
